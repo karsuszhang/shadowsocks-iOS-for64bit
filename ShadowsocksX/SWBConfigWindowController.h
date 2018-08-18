@@ -25,6 +25,7 @@
 @property (nonatomic, strong) IBOutlet NSBox *settingsBox;
 @property (nonatomic, strong) IBOutlet NSTextField *placeholderLabel;
 @property (nonatomic, weak) id<SWBConfigWindowControllerDelegate> delegate;
+@property (nonatomic, strong) IBOutlet NSTextField *garbageLenField;
 
 - (IBAction)OK:(id)sender;
 - (IBAction)cancel:(id)sender;

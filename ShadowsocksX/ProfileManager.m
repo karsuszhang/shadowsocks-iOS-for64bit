@@ -28,6 +28,7 @@
             profile.serverPort = [[ShadowsocksRunner configForKey:kShadowsocksPortKey] integerValue];
             profile.password = [ShadowsocksRunner configForKey:kShadowsocksPasswordKey];
             profile.method = [ShadowsocksRunner configForKey:kShadowsocksEncryptionKey];
+            profile.garbageLength = [[ShadowsocksRunner configForKey:kShadowsocksGarbageLength] integerValue];
             [((NSMutableArray *)configuration.profiles) addObject:profile];
         }
         return configuration;
@@ -65,6 +66,7 @@
         [ShadowsocksRunner setUsingPublicServer:NO];
         [ShadowsocksRunner saveConfigForKey:kShadowsocksIPKey value:profile.server];
         [ShadowsocksRunner saveConfigForKey:kShadowsocksPortKey value:[NSString stringWithFormat:@"%ld", (long)profile.serverPort]];
+        [ShadowsocksRunner saveConfigForKey:kShadowsocksGarbageLength value:[NSString stringWithFormat:@"%ld", (long)profile.garbageLength]];
         [ShadowsocksRunner saveConfigForKey:kShadowsocksPasswordKey value:profile.password];
         [ShadowsocksRunner saveConfigForKey:kShadowsocksEncryptionKey value:profile.method];
         [ShadowsocksRunner reloadConfig];

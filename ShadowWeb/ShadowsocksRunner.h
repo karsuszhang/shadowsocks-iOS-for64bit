@@ -12,6 +12,7 @@
 #define kShadowsocksEncryptionKey @"proxy encryption"
 #define kShadowsocksProxyModeKey @"proxy mode"
 #define kShadowsocksUsePublicServer @"public server"
+#define kShadowsocksGarbageLength @"garbage length"
 
 
 @interface ShadowsocksRunner : NSObject

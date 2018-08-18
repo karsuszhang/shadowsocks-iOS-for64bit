@@ -21,6 +21,7 @@
 
 @property (nonatomic, copy) NSString * method;
 
+@property (nonatomic, assign) NSInteger garbageLength;
 
 @end
 

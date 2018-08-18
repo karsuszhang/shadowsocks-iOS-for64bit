@@ -24,6 +24,8 @@
   
         self.method = (dictionary[@"method"] != [NSNull null]) ? dictionary[@"method"] : nil;
  
+        self.garbageLength = (dictionary[@"garbage_length"] != [NSNull null]) ?
+            [dictionary[@"garbage_length"] integerValue] : 0;
     }
     return self;
 }
@@ -57,6 +59,8 @@
   
     dictionary[@"method"] = (self.method != nil) ? self.method : [NSNull null];
  
+    dictionary[@"garbage_length"] = @(self.garbageLength);
+    
     return dictionary;
 }
 

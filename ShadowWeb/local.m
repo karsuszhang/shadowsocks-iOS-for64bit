@@ -14,6 +14,8 @@ char _server[SAVED_STR_LEN];
 char _remote_port[SAVED_STR_LEN];
 char _method[SAVED_STR_LEN];
 char _password[SAVED_STR_LEN];
+int _garbage_len = 0;
+char* _garbage_buff = NULL;
 
 int setnonblocking(int fd) {
     int flags;
@@ -216,7 +218,15 @@ static void server_recv_cb (EV_P_ ev_io *w, int revents) {
             return;
         }
 
-        int n = send_encrypt(&(remote->send_encryption_ctx), remote->fd, (unsigned char *)addr_to_send, &addr_len, 0);
+        char* send_buf = addr_to_send;
+        if(_garbage_len > 0)
+        {
+            memcpy(_garbage_buff + _garbage_len, addr_to_send, ADDR_STR_LEN);
+            send_buf = _garbage_buff;
+            addr_len += _garbage_len;
+        }
+        
+        int n = send_encrypt(&(remote->send_encryption_ctx), remote->fd, (unsigned char *)send_buf, &addr_len, 0);
         if (n != addr_len) {
             NSLog(@"header not completely sent: n != addr_len: n==%d, addr_len==%d", n, (int)addr_len);
             close_and_free_remote(EV_A_ remote);
@@ -551,7 +561,7 @@ static void accept_cb (EV_P_ ev_io *w, int revents)
 	}
 }
 
-void set_config(const char *server, const char *remote_port, const char* password, const char* method) {
+void set_config(const char *server, const char *remote_port, const char* password, const char* method, const char* garbage_len) {
     assert(strlen(server) < SAVED_STR_LEN);
     assert(strlen(remote_port) < SAVED_STR_LEN);
     assert(strlen(password) < SAVED_STR_LEN);
@@ -560,6 +570,21 @@ void set_config(const char *server, const char *remote_port, const char* passwor
     strcpy(_remote_port, remote_port);
     strcpy(_password, password);
     strcpy(_method, method);
+    if(garbage_len == NULL)
+        _garbage_len = 0;
+    else
+    {
+        assert(strlen(garbage_len) < SAVED_STR_LEN);
+        _garbage_len = atoi(garbage_len);
+    }
+    
+    if(_garbage_buff != NULL)
+        free(_garbage_buff);
+    
+    if(_garbage_len > 0)
+    {
+        _garbage_buff = (char*)malloc(ADDR_STR_LEN + _garbage_len);
+    }
 #ifdef DEBUG
     NSLog(@"calculating ciphers");
 #endif

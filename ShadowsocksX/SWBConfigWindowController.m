@@ -101,6 +101,7 @@
     profile.serverPort = 8388;
     profile.method = @"aes-256-cfb";
     profile.password = @"";
+    profile.garbageLength = 0;
     [((NSMutableArray *) configuration.profiles) addObject:profile];
     [self.tableView reloadData];
     [self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:(configuration.profiles.count - 1)] byExtendingSelection:NO];
@@ -154,6 +155,7 @@
             Profile *profile = configuration.profiles[self.tableView.selectedRow];
             [_serverField setStringValue:profile.server];
             [_portField setStringValue:[NSString stringWithFormat:@"%ld", (long)profile.serverPort]];
+            [_garbageLenField setStringValue:[NSString stringWithFormat:@"%ld", (long)profile.garbageLength]];
             [_methodBox setStringValue:profile.method];
             [_passwordField setStringValue:profile.password];
             if (profile.remarks) {
@@ -176,6 +178,7 @@
         profile.method = [_methodBox stringValue];
         profile.password = [_passwordField stringValue];
         profile.remarks = [_remarksField stringValue];
+        profile.garbageLength = [_garbageLenField integerValue];
     }
 
     return YES;
